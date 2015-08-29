@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+using DatabaseTools;
+using Model;
 
 namespace PasswordKeeper
 {
@@ -22,9 +10,39 @@ namespace PasswordKeeper
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private const string TableName = "passwords.sqlite";
+
+        public DataManager DataManager { get; set; }
+
         public MainPage()
         {
             this.InitializeComponent();
+            DataManager = new DataManager();
+            DataManager.CreateTable<Entry>(TableName);
+        }
+
+        private void btnDisplay_Click(object sender, RoutedEventArgs e)
+        {
+            var allResults = DataManager.GetAllElements<Entry>(TableName);
+            foreach (Entry entry in allResults)
+            {
+                listView.Items.Add(entry);
+            }
+        }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            DataManager.AddItemToTable(new Entry() {Category ="Email", Name = "Trolo", Password = "dsfdsf"}, TableName);
+        }
+
+        private void listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void btnDrop_Click(object sender, RoutedEventArgs e)
+        {
+            DataManager.DropTable<Entry>(TableName);
         }
     }
 }
