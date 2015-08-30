@@ -27,6 +27,7 @@ namespace PasswordKeeper.Views
             this.InitializeComponent();
         }
 
+
         private void AppBarBtnAdd_Click(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
