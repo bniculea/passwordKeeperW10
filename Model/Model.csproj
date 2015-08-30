@@ -113,7 +113,9 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmptyOrFullSelector.cs" />
     <Compile Include="Entry.cs" />
+    <Compile Include="HeaderItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Properties\Model.rd.xml" />
   </ItemGroup>

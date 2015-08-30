@@ -12,6 +12,7 @@
         <Button x:Name="s" Content="Display" HorizontalAlignment="Left" Margin="52,136,0,0" VerticalAlignment="Top" Width="191" Click="btnDisplay_Click"/>
         <ListView x:Name="listView" HorizontalAlignment="Left" Height="378" Margin="52,200,0,0" VerticalAlignment="Top" Width="298" SelectionChanged="listView_SelectionChanged"/>
         <Button x:Name="btnDrop" Content="Delete Table" HorizontalAlignment="Left" Margin="285,66,0,0" VerticalAlignment="Top" Width="189" Click="btnDrop_Click"/>
+        <Button x:Name="btnGoToVIew" Content="Add new" HorizontalAlignment="Left" Margin="285,136,0,0" VerticalAlignment="Top" Width="189" Click="btnGoToVIew_Click"/>
 
     </Grid>
 </Page>

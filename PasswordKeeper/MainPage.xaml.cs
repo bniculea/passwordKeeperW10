@@ -2,6 +2,7 @@
 using Windows.UI.Xaml.Controls;
 using DatabaseTools;
 using Model;
+using PasswordKeeper.Views;
 
 namespace PasswordKeeper
 {
@@ -43,6 +44,11 @@ namespace PasswordKeeper
         private void btnDrop_Click(object sender, RoutedEventArgs e)
         {
             DataManager.DropTable<Entry>(TableName);
+        }
+
+        private void btnGoToVIew_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof (AddNewView));
         }
     }
 }
