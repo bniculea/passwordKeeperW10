@@ -1,60 +1,201 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
+using Common;
+using DatabaseTools;
+using Model;
+using PasswordKeeper.Repository;
 
 namespace PasswordKeeper.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class DisplayAllView : Page
     {
+        private NavigationHelper NavigationHelper { get; set; }
+        private ObservableDictionary DefaultViewModel { get; set; }
+        private ObservableRangeCollection<GroupInfoList<object>> _dataLetter = null;
+        private EntryRepository EntryRepository { get; set; }
+        private ListViewBase ListViewBase { get; set; }
+        private Border GroupHeaderBorder { get; set; }
+        private int TotalEntries { get; set; }
+        private DataManager DataManager { get; set; }
         public DisplayAllView()
         {
             this.InitializeComponent();
+            EntryRepository = new EntryRepository();
+            NavigationHelper = new NavigationHelper(this);
+            DefaultViewModel = new ObservableDictionary();
+            NavigationHelper.LoadState += NavigationHelper_LoadState;
+            NavigationHelper.SaveState += NavigationHelper_SaveState;
         }
 
         private void GroupHeaderBorder_OnTapped(object sender, TappedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            SemanticZoom.IsZoomedInViewActive = false;
         }
 
         private void GroupHeaderBorder_OnLoaded(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            GroupHeaderBorder = sender as Border;
+            if (GroupHeaderBorder != null)
+            {
+                EnableDisableGroupHeader(GroupHeaderBorder);
+            }
         }
 
-        private void ListVIewItem_OnHolding(object sender, HoldingRoutedEventArgs e)
+        private void ListViewItem_OnHolding(object sender, HoldingRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
+
+            //To get the clicked item
+            // var datacontext = (e.OriginalSource as FrameworkElement).DataContext;
         }
 
         private void MenuFlyoutItemDelete_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+           MenuFlyoutItem menuFlyoutItem = sender as MenuFlyoutItem;
+            if (menuFlyoutItem != null)
+            {
+                Entry entryToDelete = GetEntry(menuFlyoutItem);
+                DataManager.RemoveItemFromTable(entryToDelete);
+                var group = _dataLetter.First(k => k.Contains(entryToDelete));
+                int entryIndexInGroup = group.IndexOf(entryToDelete);
+                group.RemoveAt(entryIndexInGroup);
+                TotalEntries--;
+                if (GroupHeaderBorder != null)
+                {
+                    EnableDisableGroupHeader(GroupHeaderBorder);
+                }
+            }
+        }
+
+        private Entry GetEntry(MenuFlyoutItem menuFlyoutItem)
+        {
+            string tag = menuFlyoutItem.Tag.ToString();
+            Expression<Func<Entry, bool>> expression = (k => k.Name.Equals(tag));
+            Entry entryToDelete = DataManager.GetItem(expression);
+            return entryToDelete;
+        }
+
+        private void EnableDisableGroupHeader(Border groupHeaderBorder)
+        {
+            if (TotalEntries < 10)
+            {
+                groupHeaderBorder.Width = 0;
+                groupHeaderBorder.Height = 0;
+                groupHeaderBorder.Opacity = 0;
+                //Opacity = 0;
+            }
         }
 
         private void EditFlyoutItem_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            MenuFlyoutItem menuFlyoutItem = sender as MenuFlyoutItem;
+            if (menuFlyoutItem != null)
+            {
+                Entry entryToEdit = GetEntry(menuFlyoutItem);
+                Frame.Navigate(typeof (EditView), entryToEdit);
+            }
         }
 
         private void CopyToClipboardFlyoutItem_OnClick(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
         }
+
+        private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        {
+
+        }
+
+        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        {
+
+        }
+
+        #region NavigationHelper registration
+        /// <summary>
+        /// The methods provided in this section are simply used to allow
+        /// NavigationHelper to respond to the page's navigation methods.
+        /// <para>
+        /// Page specific logic should be placed in event handlers for the  
+        /// <see cref="NavigationHelper.LoadState"/>
+        /// and <see cref="NavigationHelper.SaveState"/>.
+        /// The navigation parameter is available in the LoadState method 
+        /// in addition to page state preserved during an earlier session.
+        /// </para>
+        /// </summary>
+        /// <param name="e">Provides data for navigation methods and event
+        /// handlers that cannot cancel the navigation request.</param>
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            DataManager = e.Parameter as DataManager;
+            NavigationHelper.OnNavigatedTo(e);
+            var entryList = AddDataToRepository();
+            EntryRepository.Collection.AddRange(entryList);
+            TotalEntries = EntryRepository.Collection.Count;
+            _dataLetter = EntryRepository.GetGroupsByLetter;
+            Cvs.Source = _dataLetter;
+
+            ListViewBase = SemanticZoom.ZoomedOutView as ListViewBase;
+            if (ListViewBase != null)
+                ListViewBase.ItemsSource = EntryRepository.PasswordHeaders;
+
+            ListViewZoomedInPasswords.SelectionChanged -=  ListViewZoomedIn_SelectionChanged;
+            ListViewZoomedInPasswords.SelectedItem = null;
+
+            ListViewZoomedInPasswords.SelectionChanged +=  ListViewZoomedIn_SelectionChanged;
+
+            this.SemanticZoom.ViewChangeStarted -= SemanticZoom_ViewChangeStarted;
+            this.SemanticZoom.ViewChangeStarted += SemanticZoom_ViewChangeStarted;
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            NavigationHelper.OnNavigatedFrom(e);
+        }
+
+        private void SemanticZoom_ViewChangeStarted(object sender, SemanticZoomViewChangedEventArgs e)
+        {
+            if (e.SourceItem == null || e.SourceItem.Item == null) return;
+            if (e.SourceItem.Item.GetType() == typeof (HeaderItem))
+            {
+                HeaderItem headerItem = (HeaderItem) e.SourceItem.Item;
+                var group = _dataLetter.First(d => ((char) d.Key) == headerItem.HeaderName);
+                if (group != null)
+                {
+                    e.DestinationItem = new SemanticZoomLocation {Item = group};
+                }
+            }
+        }
+
+        private async void ListViewZoomedIn_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ListViewZoomedInPasswords.SelectedItem != null)
+            {
+                Entry entry = ListViewZoomedInPasswords.SelectedItem as Entry;
+                MessageDialog md = new MessageDialog(String.Format("You selected: {0} with Psw {1} and Category: {2}", entry.Name, entry.Password, entry.Password));
+                await md.ShowAsync();
+                ListViewZoomedInPasswords.SelectedItem = null;
+            }
+        }
+
+        private IEnumerable<Entry> AddDataToRepository()
+        {
+            List<Entry> passwords = DataManager.GetAllElements<Entry>();
+            return passwords;
+        }
+
+        #endregion
     }
 }

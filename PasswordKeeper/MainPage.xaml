@@ -7,12 +7,28 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Left" Margin="52,66,0,0" VerticalAlignment="Top" Width="191" Click="btnAdd_Click"/>
-        <Button x:Name="s" Content="Display" HorizontalAlignment="Left" Margin="52,136,0,0" VerticalAlignment="Top" Width="191" Click="btnDisplay_Click"/>
-        <ListView x:Name="listView" HorizontalAlignment="Left" Height="378" Margin="52,200,0,0" VerticalAlignment="Top" Width="298" SelectionChanged="listView_SelectionChanged"/>
-        <Button x:Name="btnDrop" Content="Delete Table" HorizontalAlignment="Left" Margin="285,66,0,0" VerticalAlignment="Top" Width="189" Click="btnDrop_Click"/>
-        <Button x:Name="btnGoToVIew" Content="Add new" HorizontalAlignment="Left" Margin="285,136,0,0" VerticalAlignment="Top" Width="189" Click="btnGoToVIew_Click"/>
-
+    <Grid Background="{Binding Source={StaticResource BrownGradientBrush}}">
+       <StackPanel HorizontalAlignment="Center"
+                   VerticalAlignment="Center">
+           <Button x:Name="btnAdd"
+                   Content="Add new"
+                   HorizontalAlignment="Center"
+                   Width="172"
+                   Height="66"
+                   Click="btnAdd_Click"
+                   Margin="0,0,0,10"/>
+           <Button x:Name="btnViewAll"
+                   Content="View all"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   Width="172"
+                   Height="66"
+                   Click="BtnViewAll_OnClick"
+                   Margin="0,0,0,10"/>
+           <Button Content="Categories"
+                   HorizontalAlignment="Center"
+                   Width="172"
+                   Height="66"/>
+       </StackPanel>
     </Grid>
 </Page>

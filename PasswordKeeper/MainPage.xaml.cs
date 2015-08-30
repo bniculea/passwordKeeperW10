@@ -18,37 +18,18 @@ namespace PasswordKeeper
         public MainPage()
         {
             this.InitializeComponent();
-            DataManager = new DataManager();
-            DataManager.CreateTable<Entry>(TableName);
-        }
-
-        private void btnDisplay_Click(object sender, RoutedEventArgs e)
-        {
-            var allResults = DataManager.GetAllElements<Entry>(TableName);
-            foreach (Entry entry in allResults)
-            {
-                listView.Items.Add(entry);
-            }
+            DataManager = new DataManager(TableName);
+            DataManager.CreateTable<Entry>();
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
-            DataManager.AddItemToTable(new Entry() {Category ="Email", Name = "Trolo", Password = "dsfdsf"}, TableName);
+            Frame.Navigate(typeof (AddNewView), DataManager);
         }
 
-        private void listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void BtnViewAll_OnClick(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void btnDrop_Click(object sender, RoutedEventArgs e)
-        {
-            DataManager.DropTable<Entry>(TableName);
-        }
-
-        private void btnGoToVIew_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof (AddNewView));
+            Frame.Navigate(typeof(DisplayAllView), DataManager);
         }
     }
 }

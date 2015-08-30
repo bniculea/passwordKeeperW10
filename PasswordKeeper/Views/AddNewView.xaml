@@ -48,6 +48,7 @@
                              HorizontalAlignment="Center"
                              Width="220"
                              VerticalAlignment="Center"
+                             KeyDown="TxtName_OnKeyDown"
                              />
                     <TextBlock Text="Password:"
                                HorizontalAlignment="Center"
@@ -57,7 +58,8 @@
                                  IsPasswordRevealButtonEnabled="True"
                                  HorizontalAlignment="Center"
                                  VerticalAlignment="Center"
-                                 Width="220"/>
+                                 Width="220"
+                                 KeyDown="TxtPassword_OnKeyDown"/>
                     <TextBlock Text="Category"
                                HorizontalAlignment="Center"
                                FontSize="32"
@@ -65,17 +67,19 @@
                     <ComboBox x:Name="ComboCategories"
                               Width="220"
                               HorizontalAlignment="Center"
+                              SelectionChanged="ComboCategories_OnSelectionChanged"
                               />
-                    <TextBlock x:Name="TxtCatName"
+                    <TextBlock x:Name="TextBlockCatName"
                                Text="Category name:"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontSize="32"
                                FontFamily="{StaticResource ContentControlThemeFontFamily}"
                                Visibility="Collapsed"/>
-                    <TextBox x:Name="TxtCategoryName"
+                    <TextBox x:Name="TextBoxCategoryName"
                              Width="220"
-                             Visibility="Collapsed"/>
+                             Visibility="Collapsed"
+                             KeyDown="TxtCategoryName_OnKeyDown"/>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

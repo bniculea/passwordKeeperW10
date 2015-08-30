@@ -63,7 +63,7 @@
         </DataTemplate>
         <DataTemplate x:Key="GroupItemTemplate">
             <StackPanel x:Name="ListVIewItem"
-                        Holding="ListVIewItem_OnHolding">
+                        Holding="ListViewItem_OnHolding">
                 <FlyoutBase.AttachedFlyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Delete"
