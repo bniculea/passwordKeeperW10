@@ -31,5 +31,10 @@ namespace PasswordKeeper
         {
             Frame.Navigate(typeof(DisplayAllView), DataManager);
         }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            DataManager.DropTable<Entry>();
+        }
     }
 }

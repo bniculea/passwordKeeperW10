@@ -1,18 +1,15 @@
-﻿namespace Model
+﻿using SQLite.Net.Attributes;
+
+namespace Model
 {
 
     public class Entry
     {
-        public string Name { get; private set; }
-        public string Password { get; private set; }
-        public string Category { get; private set; }
-
-        public Entry(string name, string password, string category)
-        {
-            Name = name;
-            Password = password;
-            Category = category;
-        }
+        [PrimaryKey, AutoIncrement, Column("Id")]
+        public int Id { get; set; }
+        public string Name { get;  set; }
+        public string Password { get;  set; }
+        public string Category { get;  set; }
 
         public override string ToString()
         {

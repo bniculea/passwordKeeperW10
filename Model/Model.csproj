@@ -119,6 +119,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Properties\Model.rd.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="SQLite.Net">
+      <HintPath>..\..\..\..\..\.nuget\packages\SQLite.Net-PCL\3.0.5\lib\Windows8\SQLite.Net.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

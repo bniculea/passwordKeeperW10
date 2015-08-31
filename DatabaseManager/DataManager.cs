@@ -62,7 +62,7 @@ namespace DatabaseTools
             T retItem = default(T);
             using (SQLiteConnection connection = new SQLiteConnection(new SQLitePlatformWinRT(), GetTablePath()))
             {
-                retItem = connection.Table<T>().Where(predicatExpression).First();
+                retItem = connection.Table<T>().Where(predicatExpression).FirstOrDefault();
             }
             return retItem;
         }

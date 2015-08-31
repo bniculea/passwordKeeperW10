@@ -29,6 +29,12 @@
                    HorizontalAlignment="Center"
                    Width="172"
                    Height="66"/>
+           <Button Content="Delete Database"
+                   HorizontalAlignment="Center"
+                   Width="172"
+                   Height="66"
+                   Click="ButtonBase_OnClick"
+                   Margin="0,10,0,0"/>
        </StackPanel>
     </Grid>
 </Page>

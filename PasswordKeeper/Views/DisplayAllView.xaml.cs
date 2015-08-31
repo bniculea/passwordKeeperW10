@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -32,8 +34,35 @@ namespace PasswordKeeper.Views
             EntryRepository = new EntryRepository();
             NavigationHelper = new NavigationHelper(this);
             DefaultViewModel = new ObservableDictionary();
+            HandleBackButtonPressed();
             NavigationHelper.LoadState += NavigationHelper_LoadState;
             NavigationHelper.SaveState += NavigationHelper_SaveState;
+        }
+
+        private void HandleBackButtonPressed()
+        {
+            Windows.UI.Core.SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += (s, a) =>
+            {
+                Debug.WriteLine("BackRequested");
+                if (Frame.CanGoBack)
+                {
+                    Frame.GoBack();
+                    a.Handled = true;
+                }
+            };
+            //if (ApiInformation.IsApiContractPresent("Windows.Phone.PhoneContract", 1, 0))
+            //{
+            //    Windows.Phone.UI.Input.HardwareButtons.BackPressed += (s, a) =>
+            //    {
+            //        Debug.WriteLine("BackPressed");
+            //        if (Frame.CanGoBack)
+            //        {
+            //            Frame.GoBack();
+            //            a.Handled = true;
+            //        }
+            //    };
+            //}
         }
 
         private void GroupHeaderBorder_OnTapped(object sender, TappedRoutedEventArgs e)
@@ -151,10 +180,10 @@ namespace PasswordKeeper.Views
             if (ListViewBase != null)
                 ListViewBase.ItemsSource = EntryRepository.PasswordHeaders;
 
-            ListViewZoomedInPasswords.SelectionChanged -=  ListViewZoomedIn_SelectionChanged;
+           // ListViewZoomedInPasswords.SelectionChanged -=  ListViewZoomedIn_SelectionChanged;
             ListViewZoomedInPasswords.SelectedItem = null;
 
-            ListViewZoomedInPasswords.SelectionChanged +=  ListViewZoomedIn_SelectionChanged;
+           // ListViewZoomedInPasswords.SelectionChanged +=  ListViewZoomedIn_SelectionChanged;
 
             this.SemanticZoom.ViewChangeStarted -= SemanticZoom_ViewChangeStarted;
             this.SemanticZoom.ViewChangeStarted += SemanticZoom_ViewChangeStarted;
@@ -197,5 +226,12 @@ namespace PasswordKeeper.Views
         }
 
         #endregion
+
+        private void ListViewItem_OnTapped(object sender, TappedRoutedEventArgs e)
+        {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
+        }
     }
 }

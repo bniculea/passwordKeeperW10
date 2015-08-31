@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using Windows.Foundation.Metadata;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -29,6 +32,33 @@ namespace PasswordKeeper.Views
             NavigationHelper = new NavigationHelper(this);
             NavigationHelper.LoadState += NavigationHelper_LoadState;
             NavigationHelper.SaveState += NavigationHelper_SaveState;
+            HandleBackButtonPressed();
+        }
+
+        private void HandleBackButtonPressed()
+        {
+            Windows.UI.Core.SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += (s, a) =>
+            {
+                Debug.WriteLine("BackRequested");
+                if (Frame.CanGoBack)
+                {
+                    Frame.GoBack();
+                    a.Handled = true;
+                }
+            };
+            //if (ApiInformation.IsApiContractPresent("Windows.Phone.PhoneContract", 1, 0))
+            //{
+            //    Windows.Phone.UI.Input.HardwareButtons.BackPressed += (s, a) =>
+            //    {
+            //        Debug.WriteLine("BackPressed");
+            //        if (Frame.CanGoBack)
+            //        {
+            //            Frame.GoBack();
+            //            a.Handled = true;
+            //        }
+            //    };
+            //}
         }
 
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
@@ -43,6 +73,7 @@ namespace PasswordKeeper.Views
 
         private void UpdateCategories()
         {
+            DataManager = new DataManager("passwords.sqlite");
             Categories.Add("Other");
             Categories.Add("Email");
             Categories.Add("Websites");
@@ -80,7 +111,7 @@ namespace PasswordKeeper.Views
                 }
                 else
                 {
-                    Entry entry = new Entry(name,password, category);
+                    Entry entry = new Entry {Category = category, Name=name, Password = password};
                     DataManager.AddItemToTable(entry);
                     ResetControls();
                 }

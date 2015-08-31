@@ -62,8 +62,7 @@
             </Border>
         </DataTemplate>
         <DataTemplate x:Key="GroupItemTemplate">
-            <StackPanel x:Name="ListVIewItem"
-                        Holding="ListViewItem_OnHolding">
+            <StackPanel x:Name="ListViewItem" Holding="ListViewItem_OnHolding" Tapped="ListViewItem_OnTapped" >
                 <FlyoutBase.AttachedFlyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Delete"
@@ -121,6 +120,7 @@
                               IsSwipeEnabled="True"
                               ScrollViewer.IsVerticalScrollChainingEnabled="False"
                               ItemTemplate="{StaticResource GroupItemTemplate}"
+                              
                               Background="{Binding Source={StaticResource DisplayDataBackgroundColor}}">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
