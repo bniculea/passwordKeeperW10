@@ -18,6 +18,7 @@ namespace PasswordKeeper.Views
 {
     public sealed partial class AddNewView : Page
     {
+        private static string EntryAlreadyExistWarning = "There is already an account with this name. Please choose a different one :)";
         private NavigationHelper NavigationHelper { get; set; }
         private ObservableDictionary DefaultViewModel { get; set; }
         private ObservableRangeCollection<String> Categories { get; set; } 
@@ -27,7 +28,7 @@ namespace PasswordKeeper.Views
             this.InitializeComponent();
             DefaultViewModel = new ObservableDictionary();
             Categories = new ObservableRangeCollection<string>();
-            UpdateCategories();
+            GetUniqueCategories();
             ComboCategories.ItemsSource = Categories;
             NavigationHelper = new NavigationHelper(this);
             NavigationHelper.LoadState += NavigationHelper_LoadState;
@@ -71,18 +72,16 @@ namespace PasswordKeeper.Views
        
         }
 
-        private void UpdateCategories()
+        private void GetUniqueCategories()
         {
             DataManager = new DataManager("passwords.sqlite");
-            Categories.Add("Other");
-            Categories.Add("Email");
-            Categories.Add("Websites");
-            Categories.Add("Custom");
-            List<Entry> entries = DataManager.GetAllElements<Entry>();
-            List<string> groups = entries.Select(entry => entry.Category).ToList();
-            foreach (string @group in groups)
+            List<string> defaultCategories = new List<string>{"Email", "Website","Other","Custom"};
+            List<string> addedCategoriesList = DataManager.GetAllElements<Entry>().Select(entry=> entry.Category).ToList();
+            defaultCategories.AddRange(addedCategoriesList);
+            IEnumerable<string> uniqueCategories = defaultCategories.Distinct();
+            foreach (string category in uniqueCategories)
             {
-                Categories.Add(@group);
+                Categories.Add(category);
             }
         }
 
@@ -105,17 +104,21 @@ namespace PasswordKeeper.Views
                 Entry allreadyExistEntry = DataManager.GetItem(expression);
                 if (allreadyExistEntry != null)
                 {
-                    MessageDialog messageDialog =
-                        new MessageDialog("There is already an account with this name. Please choose a different one :)");
-                    await messageDialog.ShowAsync();
+                    await new MessageDialog(EntryAlreadyExistWarning).ShowAsync();
                 }
                 else
                 {
-                    Entry entry = new Entry {Category = category, Name=name, Password = password};
-                    DataManager.AddItemToTable(entry);
-                    ResetControls();
+                    StoreNewEntry(category, name, password);
                 }
             }
+        }
+
+        private void StoreNewEntry(string category, string name, string password)
+        {
+            Entry entry = new Entry {Category = category, Name = name, Password = password};
+            DataManager.AddItemToTable(entry);
+            if (!Categories.Contains(entry.Category)) Categories.Add(entry.Category);
+            ResetControls();
         }
 
         private void ResetControls()
@@ -156,22 +159,17 @@ namespace PasswordKeeper.Views
 
         private void ComboCategories_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedItem = string.Empty;
             if (ComboCategories.SelectedItem != null)
             {
-                selectedItem = ComboCategories.SelectedItem.ToString();
-                if (selectedItem.Equals("Custom"))
-                {
-                    TextBlockCatName.Visibility = Visibility.Visible;
-                    TextBoxCategoryName.Visibility = Visibility.Visible;
-                    TextBoxCategoryName.Select(0, 0);
-                }
-                else
-                {
-                    TextBlockCatName.Visibility = Visibility.Collapsed;
-                    TextBoxCategoryName.Visibility = Visibility.Collapsed;
-                }
+                var selectedItem = ComboCategories.SelectedItem.ToString();
+                ShowCategoriesControls(selectedItem.Equals("Custom") ? Visibility.Visible : Visibility.Collapsed);
             }
+        }
+
+        private void ShowCategoriesControls(Visibility visibility)
+        {
+            TextBlockCatName.Visibility = visibility;
+            TextBoxCategoryName.Visibility = visibility;
         }
 
         private void TxtCategoryName_OnKeyDown(object sender, KeyRoutedEventArgs e)
