@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -138,7 +139,27 @@ namespace PasswordKeeper.Views
 
         private void CopyToClipboardFlyoutItem_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            MenuFlyoutItem menuFlyoutItem = sender as MenuFlyoutItem;
+            if (menuFlyoutItem != null)
+            {
+                Entry selectedEntry = GetEntry(menuFlyoutItem);
+                if (selectedEntry  != null) SetClipboardContent(selectedEntry);
+            }
+           
+        }
+
+        private static void SetClipboardContent(Entry selectedEntry)
+        {
+            DataPackage dataPackage = new DataPackage();
+            try
+            {
+                dataPackage.SetText(selectedEntry.Password);
+                Clipboard.SetContent(dataPackage);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
 
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
@@ -180,10 +201,10 @@ namespace PasswordKeeper.Views
             if (ListViewBase != null)
                 ListViewBase.ItemsSource = EntryRepository.PasswordHeaders;
 
-           // ListViewZoomedInPasswords.SelectionChanged -=  ListViewZoomedIn_SelectionChanged;
+            //ListViewZoomedInPasswords.SelectionChanged -=  ListViewZoomedIn_SelectionChanged;
             ListViewZoomedInPasswords.SelectedItem = null;
 
-           // ListViewZoomedInPasswords.SelectionChanged +=  ListViewZoomedIn_SelectionChanged;
+            //ListViewZoomedInPasswords.SelectionChanged +=  ListViewZoomedIn_SelectionChanged;
 
             this.SemanticZoom.ViewChangeStarted -= SemanticZoom_ViewChangeStarted;
             this.SemanticZoom.ViewChangeStarted += SemanticZoom_ViewChangeStarted;
