@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using Windows.Foundation.Metadata;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -22,13 +21,11 @@ namespace PasswordKeeper.Views
         private NavigationHelper NavigationHelper { get; set; }
         private ObservableDictionary DefaultViewModel { get; set; }
         private ObservableRangeCollection<String> Categories { get; set; } 
-        private DataManager DataManager { get; set; } 
         public AddNewView()
         {
             this.InitializeComponent();
             DefaultViewModel = new ObservableDictionary();
-            Categories = new ObservableRangeCollection<string>();
-            GetUniqueCategories();
+            Categories = DataHandler.Instance.GetUniqueCategories();
             ComboCategories.ItemsSource = Categories;
             NavigationHelper = new NavigationHelper(this);
             NavigationHelper.LoadState += NavigationHelper_LoadState;
@@ -72,20 +69,6 @@ namespace PasswordKeeper.Views
        
         }
 
-        private void GetUniqueCategories()
-        {
-            DataManager = new DataManager("passwords.sqlite");
-            List<string> defaultCategories = new List<string>{"Email", "Website","Other","Custom"};
-            List<string> addedCategoriesList = DataManager.GetAllElements<Entry>().Select(entry=> entry.Category).ToList();
-            defaultCategories.AddRange(addedCategoriesList);
-            IEnumerable<string> uniqueCategories = defaultCategories.Distinct();
-            foreach (string category in uniqueCategories)
-            {
-                Categories.Add(category);
-            }
-        }
-
-
         private async void AppBarBtnAdd_Click(object sender, RoutedEventArgs e)
         {
             string name = TxtName.Text;
@@ -101,7 +84,7 @@ namespace PasswordKeeper.Views
             else
             {
                 Expression<Func<Entry, bool>> expression = (k => k.Name.Equals(name));
-                Entry allreadyExistEntry = DataManager.GetItem(expression);
+                Entry allreadyExistEntry = DataHandler.Instance.GetEntry(expression);
                 if (allreadyExistEntry != null)
                 {
                     await new MessageDialog(EntryAlreadyExistWarning).ShowAsync();
@@ -116,7 +99,7 @@ namespace PasswordKeeper.Views
         private void StoreNewEntry(string category, string name, string password)
         {
             Entry entry = new Entry {Category = category, Name = name, Password = password};
-            DataManager.AddItemToTable(entry);
+            DataHandler.Instance.AddEntry(entry);
             if (!Categories.Contains(entry.Category)) Categories.Add(entry.Category);
             ResetControls();
         }
@@ -181,7 +164,6 @@ namespace PasswordKeeper.Views
         #region NavigationHelper registration
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            DataManager = e.Parameter as DataManager;
             NavigationHelper.OnNavigatedTo(e);
         }
 
@@ -190,5 +172,6 @@ namespace PasswordKeeper.Views
             NavigationHelper.OnNavigatedFrom(e);
         }
         #endregion
-    }
+
+   }
 }

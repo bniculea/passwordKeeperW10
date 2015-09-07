@@ -11,30 +11,26 @@ namespace PasswordKeeper
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private const string TableName = "passwords.sqlite";
-
-        public DataManager DataManager { get; set; }
 
         public MainPage()
         {
             this.InitializeComponent();
-            DataManager = new DataManager(TableName);
-            DataManager.CreateTable<Entry>();
+            DataHandler.Instance.InitDatabase();
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof (AddNewView), DataManager);
+            Frame.Navigate(typeof (AddNewView));
         }
 
         private void BtnViewAll_OnClick(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(DisplayAllView), DataManager);
+            Frame.Navigate(typeof(DisplayAllView));
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            DataManager.DropTable<Entry>();
+            DataHandler.Instance.DropTable();
         }
 
         private void BtnExit_OnClick(object sender, RoutedEventArgs e)

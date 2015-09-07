@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.UI.Core;
 using Windows.UI.Popups;
@@ -13,7 +12,6 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 using Common;
-using DatabaseTools;
 using Model;
 using PasswordKeeper.Repository;
 
@@ -28,42 +26,14 @@ namespace PasswordKeeper.Views
         private ListViewBase ListViewBase { get; set; }
         private Border GroupHeaderBorder { get; set; }
         private int TotalEntries { get; set; }
-        private DataManager DataManager { get; set; }
         public DisplayAllView()
         {
             this.InitializeComponent();
             EntryRepository = new EntryRepository();
             NavigationHelper = new NavigationHelper(this);
             DefaultViewModel = new ObservableDictionary();
-            HandleBackButtonPressed();
             NavigationHelper.LoadState += NavigationHelper_LoadState;
             NavigationHelper.SaveState += NavigationHelper_SaveState;
-        }
-
-        private void HandleBackButtonPressed()
-        {
-            Windows.UI.Core.SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-            Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += (s, a) =>
-            {
-                Debug.WriteLine("BackRequested");
-                if (Frame.CanGoBack)
-                {
-                    Frame.GoBack();
-                    a.Handled = true;
-                }
-            };
-            //if (ApiInformation.IsApiContractPresent("Windows.Phone.PhoneContract", 1, 0))
-            //{
-            //    Windows.Phone.UI.Input.HardwareButtons.BackPressed += (s, a) =>
-            //    {
-            //        Debug.WriteLine("BackPressed");
-            //        if (Frame.CanGoBack)
-            //        {
-            //            Frame.GoBack();
-            //            a.Handled = true;
-            //        }
-            //    };
-            //}
         }
 
         private void GroupHeaderBorder_OnTapped(object sender, TappedRoutedEventArgs e)
@@ -96,7 +66,8 @@ namespace PasswordKeeper.Views
             if (menuFlyoutItem != null)
             {
                 Entry entryToDelete = GetEntry(menuFlyoutItem);
-                DataManager.RemoveItemFromTable(entryToDelete);
+      
+                DataHandler.Instance.RemoveEntry(entryToDelete);
                 var group = _dataLetter.First(k => k.Contains(entryToDelete));
                 int entryIndexInGroup = group.IndexOf(entryToDelete);
                 group.RemoveAt(entryIndexInGroup);
@@ -112,8 +83,8 @@ namespace PasswordKeeper.Views
         {
             string tag = menuFlyoutItem.Tag.ToString();
             Expression<Func<Entry, bool>> expression = (k => k.Name.Equals(tag));
-            Entry entryToDelete = DataManager.GetItem(expression);
-            return entryToDelete;
+            Entry entry = DataHandler.Instance.GetEntry(expression);
+            return entry;
         }
 
         private void EnableDisableGroupHeader(Border groupHeaderBorder)
@@ -189,7 +160,6 @@ namespace PasswordKeeper.Views
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            DataManager = e.Parameter as DataManager;
             NavigationHelper.OnNavigatedTo(e);
             var entryList = AddDataToRepository();
             EntryRepository.Collection.AddRange(entryList);
@@ -242,8 +212,8 @@ namespace PasswordKeeper.Views
 
         private IEnumerable<Entry> AddDataToRepository()
         {
-            List<Entry> passwords = DataManager.GetAllElements<Entry>();
-            return passwords;
+            List<Entry> allEntries = DataHandler.Instance.GetAllEntries();
+            return allEntries;
         }
 
         #endregion

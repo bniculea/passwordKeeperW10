@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -32,7 +33,7 @@ namespace PasswordKeeper
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-
+            ActivationKind activationKind = e.Kind;
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
@@ -48,7 +49,6 @@ namespace PasswordKeeper
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
-
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
@@ -69,6 +69,43 @@ namespace PasswordKeeper
             }
             // Ensure the current window is active
             Window.Current.Activate();
+            SystemNavigationManager.GetForCurrentView().BackRequested += App_BackRequested;
+
+            rootFrame.Navigated += (s, a) =>
+            {
+                if (rootFrame.CanGoBack)
+                {
+                    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+                        AppViewBackButtonVisibility.Visible;
+                }
+                else
+                {
+                    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+                        AppViewBackButtonVisibility.Collapsed;
+                }
+            };
+
+
+        }
+
+        public event EventHandler<BackRequestedEventArgs> OnBackRequested;
+
+        private void App_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            if (OnBackRequested != null){OnBackRequested(this, e);}
+
+            // Check that no-one has already handled this
+            if (!e.Handled)
+            {
+                //Default is to navigate back within the Frame
+                Frame frame = Window.Current.Content as Frame;
+                if (frame.CanGoBack)
+                {
+                    frame.GoBack();
+                    // Signal handled so that system does not navigate back through app stack
+                    e.Handled = true;
+                }
+            }
         }
 
         /// <summary>
