@@ -49,7 +49,7 @@ namespace PasswordKeeper.Views
             }
         }
 
-        private static MessageDialog CreateMessageDialog()
+        private MessageDialog CreateMessageDialog()
         {
             MessageDialog messageDialog = new MessageDialog("Unsaved changes. Do you wish to exit?", "Pending changes");
             messageDialog.Commands.Add(new UICommand("Yes"));

@@ -48,7 +48,8 @@
                              HorizontalAlignment="Center"
                              Width="220"
                              VerticalAlignment="Center"
-                             KeyDown="TxtName_OnKeyDown"
+                             KeyDown="TxtName_OnKeyDown" TextChanged="TxtName_TextChanged"
+                             
                              />
                     <TextBlock Text="Password"
                                HorizontalAlignment="Center"
@@ -61,7 +62,7 @@
                                  VerticalAlignment="Center"
                                  Width="220"
                                  Margin="0,5,0,0"
-                                 KeyDown="TxtPassword_OnKeyDown"
+                                 KeyDown="TxtPassword_OnKeyDown" PasswordChanged="TxtPassword_PasswordChanged"
                                 />
                     <CheckBox  x:Name="ShowPasswordCheckbox"
                                Content="Show password"

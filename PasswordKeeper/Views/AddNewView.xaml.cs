@@ -18,6 +18,8 @@ namespace PasswordKeeper.Views
         private NavigationHelper NavigationHelper { get; set; }
         private ObservableDictionary DefaultViewModel { get; set; }
         private ObservableRangeCollection<String> Categories { get; set; } 
+        private  App App { get; set; }
+        private bool IsDirty { get; set; }
         public AddNewView()
         {
             this.InitializeComponent();
@@ -27,34 +29,9 @@ namespace PasswordKeeper.Views
             NavigationHelper = new NavigationHelper(this);
             NavigationHelper.LoadState += NavigationHelper_LoadState;
             NavigationHelper.SaveState += NavigationHelper_SaveState;
-            HandleBackButtonPressed();
+            App = (App)Application.Current;
         }
 
-        private void HandleBackButtonPressed()
-        {
-            Windows.UI.Core.SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-            Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += (s, a) =>
-            {
-                Debug.WriteLine("BackRequested");
-                if (Frame.CanGoBack)
-                {
-                    Frame.GoBack();
-                    a.Handled = true;
-                }
-            };
-            //if (ApiInformation.IsApiContractPresent("Windows.Phone.PhoneContract", 1, 0))
-            //{
-            //    Windows.Phone.UI.Input.HardwareButtons.BackPressed += (s, a) =>
-            //    {
-            //        Debug.WriteLine("BackPressed");
-            //        if (Frame.CanGoBack)
-            //        {
-            //            Frame.GoBack();
-            //            a.Handled = true;
-            //        }
-            //    };
-            //}
-        }
 
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
@@ -141,6 +118,7 @@ namespace PasswordKeeper.Views
         {
             if (ComboCategories.SelectedItem != null)
             {
+                IsDirty = true;
                 var selectedItem = ComboCategories.SelectedItem.ToString();
                 ShowCategoriesControls(selectedItem.Equals("Custom") ? Visibility.Visible : Visibility.Collapsed);
             }
@@ -162,13 +140,49 @@ namespace PasswordKeeper.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             NavigationHelper.OnNavigatedTo(e);
+            IsDirty = false;
+            App.OnBackRequested += App_OnBackRequested;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             NavigationHelper.OnNavigatedFrom(e);
+            App.OnBackRequested -= App_OnBackRequested;
         }
+
         #endregion
+        private async void App_OnBackRequested(object sender, BackRequestedEventArgs e)
+        {
+            e.Handled = true;
+            if (IsDirty)
+            {
+                MessageDialog messageDialog = CreateMessageDialog();
+                var result = await messageDialog.ShowAsync();
+                if (result.Label.Equals("Yes") && NavigationHelper.CanGoBack())
+                {
+                    NavigationHelper.GoBack();
+                    IsDirty = false;
+                }
+            }
+            else
+            {
+                if (NavigationHelper.CanGoBack())
+                {
+                    NavigationHelper.GoBack();
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private MessageDialog CreateMessageDialog()
+        {
+            MessageDialog messageDialog = new MessageDialog("Unsaved changes. Do you wish to exit?", "Pending changes");
+            messageDialog.Commands.Add(new UICommand("Yes"));
+            messageDialog.Commands.Add(new UICommand("No"));
+            messageDialog.DefaultCommandIndex = 0;
+            messageDialog.CancelCommandIndex = 1;
+            return messageDialog;
+        }
 
         private void ShowPasswordCheckbox_OnChecked(object sender, RoutedEventArgs e)
         {
@@ -178,6 +192,17 @@ namespace PasswordKeeper.Views
         private void ShowPasswordCheckbox_Unchecked(object sender, RoutedEventArgs e)
         {
             TxtPassword.PasswordRevealMode = PasswordRevealMode.Hidden;
+        }
+
+        private void TxtName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsDirty = !string.IsNullOrEmpty(TxtName.Text);
+
+        }
+
+        private void TxtPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            IsDirty = !string.IsNullOrEmpty(TxtPassword.Password);
         }
     }
 }
