@@ -44,6 +44,7 @@ namespace PasswordKeeper.Views
                 if (NavigationHelper.CanGoBack())
                 {
                     NavigationHelper.GoBack();
+                    e.Handled = true;
                 }
             }
         }
