@@ -50,16 +50,24 @@
                              VerticalAlignment="Center"
                              KeyDown="TxtName_OnKeyDown"
                              />
-                    <TextBlock Text="Password:"
+                    <TextBlock Text="Password"
                                HorizontalAlignment="Center"
                                FontSize="32"
                                FontFamily="{StaticResource ContentControlThemeFontFamily}"/>
                     <PasswordBox x:Name="TxtPassword"
-                                 IsPasswordRevealButtonEnabled="True"
+                                 PlaceholderText="Enter password"
+                                 PasswordRevealMode="Hidden"
                                  HorizontalAlignment="Center"
                                  VerticalAlignment="Center"
                                  Width="220"
-                                 KeyDown="TxtPassword_OnKeyDown"/>
+                                 Margin="0,5,0,0"
+                                 KeyDown="TxtPassword_OnKeyDown"
+                                />
+                    <CheckBox  x:Name="ShowPasswordCheckbox"
+                               Content="Show password"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Checked="ShowPasswordCheckbox_OnChecked" Unchecked="ShowPasswordCheckbox_Unchecked"/>
                     <TextBlock Text="Category"
                                HorizontalAlignment="Center"
                                FontSize="32"

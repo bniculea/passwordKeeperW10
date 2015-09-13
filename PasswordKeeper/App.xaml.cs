@@ -92,7 +92,7 @@ namespace PasswordKeeper
 
         private void App_BackRequested(object sender, BackRequestedEventArgs e)
         {
-            if (OnBackRequested != null){OnBackRequested(this, e);}
+            OnBackRequested?.Invoke(this, e);
 
             // Check that no-one has already handled this
             if (!e.Handled)

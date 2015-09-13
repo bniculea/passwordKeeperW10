@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Linq.Expressions;
 using Windows.UI.Core;
 using Windows.UI.Popups;
@@ -10,7 +8,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 using Common;
-using DatabaseTools;
 using Model;
 
 namespace PasswordKeeper.Views
@@ -173,5 +170,14 @@ namespace PasswordKeeper.Views
         }
         #endregion
 
-   }
+        private void ShowPasswordCheckbox_OnChecked(object sender, RoutedEventArgs e)
+        {
+            TxtPassword.PasswordRevealMode = PasswordRevealMode.Visible;
+        }
+
+        private void ShowPasswordCheckbox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            TxtPassword.PasswordRevealMode = PasswordRevealMode.Hidden;
+        }
+    }
 }
