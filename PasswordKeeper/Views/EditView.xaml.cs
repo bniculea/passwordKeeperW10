@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -101,6 +102,7 @@ namespace PasswordKeeper.Views
             DefaultName = entry.Name;
             DefaultPassword = entry.Password;
             DefaultCategory = entry.Category;
+            IsDirty = false;
         }
         #endregion
 
@@ -120,7 +122,8 @@ namespace PasswordKeeper.Views
             if (IsInputValid())
             {
                 DataHandler.Instance.UpdateItem(DefaultName, TxtName.Text, GetCategory(), TxtPassword.Password);
-                if(NavigationHelper.CanGoBack()) NavigationHelper.GoBack();
+                await PrompEditWasSuccesfully();
+                ResetDefaults(TxtName.Text, GetCategory(), TxtPassword.Password);
             }
             else
             {
@@ -129,6 +132,23 @@ namespace PasswordKeeper.Views
                 await messageDialog.ShowAsync();
             }
 
+        }
+
+        private static async Task PrompEditWasSuccesfully()
+        {
+            MessageDialog messageDialog = new MessageDialog("Entry was successfully edited and saved.",
+                "Saved Changes");
+            messageDialog.Commands.Add(new UICommand("OK"));
+            messageDialog.DefaultCommandIndex = 0;
+            await messageDialog.ShowAsync();
+        }
+
+        private void ResetDefaults(string newName, string newCategory, string newPassword)
+        {
+            DefaultName = newName;
+            DefaultCategory = newCategory;
+            DefaultPassword = newPassword;
+            IsDirty = false;
         }
 
         private bool IsInputValid()
