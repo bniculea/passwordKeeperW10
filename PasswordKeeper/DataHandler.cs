@@ -78,5 +78,10 @@ namespace PasswordKeeper
         {
             DataManager.AddItemToTable(entry);
         }
+
+        public void UpdateEntry(string entryName)
+        {
+            
+        }
     }
 }

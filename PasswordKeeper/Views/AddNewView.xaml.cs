@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq.Expressions;
 using Windows.UI.Core;
 using Windows.UI.Popups;
@@ -48,8 +47,7 @@ namespace PasswordKeeper.Views
             string name = TxtName.Text;
             string password = TxtPassword.Password;
             string category = GetCategory();
-            if (string.IsNullOrEmpty(name.Trim()) || string.IsNullOrEmpty(password.Trim()) ||
-                string.IsNullOrEmpty(category))
+            if (IsValidInput(name, password, category))
             {
                 MessageDialog messageDialog = new MessageDialog("Name, Password and Category are mandatory",
                     "Incomplete input");
@@ -68,6 +66,12 @@ namespace PasswordKeeper.Views
                     StoreNewEntry(category, name, password);
                 }
             }
+        }
+
+        private bool IsValidInput(string name, string password, string category)
+        {
+            return string.IsNullOrEmpty(name.Trim()) || string.IsNullOrEmpty(password.Trim()) ||
+                   string.IsNullOrEmpty(category);
         }
 
         private void StoreNewEntry(string category, string name, string password)
@@ -114,22 +118,6 @@ namespace PasswordKeeper.Views
                 ComboCategories.Focus(FocusState.Pointer);
         }
 
-        private void ComboCategories_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (ComboCategories.SelectedItem != null)
-            {
-                IsDirty = true;
-                var selectedItem = ComboCategories.SelectedItem.ToString();
-                ShowCategoriesControls(selectedItem.Equals("Custom") ? Visibility.Visible : Visibility.Collapsed);
-            }
-        }
-
-        private void ShowCategoriesControls(Visibility visibility)
-        {
-            TextBlockCatName.Visibility = visibility;
-            TextBoxCategoryName.Visibility = visibility;
-        }
-
         private void TxtCategoryName_OnKeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Accept)
@@ -173,7 +161,6 @@ namespace PasswordKeeper.Views
                 }
             }
         }
-
         private MessageDialog CreateMessageDialog()
         {
             MessageDialog messageDialog = new MessageDialog("Unsaved changes. Do you wish to exit?", "Pending changes");
@@ -183,26 +170,26 @@ namespace PasswordKeeper.Views
             messageDialog.CancelCommandIndex = 1;
             return messageDialog;
         }
-
         private void ShowPasswordCheckbox_OnChecked(object sender, RoutedEventArgs e)
         {
             TxtPassword.PasswordRevealMode = PasswordRevealMode.Visible;
         }
-
         private void ShowPasswordCheckbox_Unchecked(object sender, RoutedEventArgs e)
         {
             TxtPassword.PasswordRevealMode = PasswordRevealMode.Hidden;
         }
-
         private void TxtName_TextChanged(object sender, TextChangedEventArgs e)
         {
             IsDirty = !string.IsNullOrEmpty(TxtName.Text);
 
         }
-
         private void TxtPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
             IsDirty = !string.IsNullOrEmpty(TxtPassword.Password);
+        }
+        private void ComboCategories_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            IsDirty = true;
         }
     }
 }
