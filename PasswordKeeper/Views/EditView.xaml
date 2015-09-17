@@ -79,7 +79,8 @@
                     <ComboBox x:Name="ComboCategories"
                               Width="220"
                               HorizontalAlignment="Center"
-                              SelectionChanged="ComboCategories_OnSelectionChanged" LostFocus="ComboCategories_LostFocus"
+                              SelectionChanged="ComboCategories_OnSelectionChanged"
+                             
                               />
                     <TextBlock x:Name="TextBlockCatName"
                                Text="Category name:"

@@ -75,5 +75,15 @@ namespace DatabaseTools
                 connection.Commit();
             }
         }
+
+        public void ExecuteScalar(string query,  params object[] parameters)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(new SQLitePlatformWinRT(), GetTablePath()))
+            {
+                connection.Execute(query, parameters);
+                connection.Commit();
+            }
+        }
+
     }
 }

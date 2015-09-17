@@ -106,16 +106,28 @@ namespace PasswordKeeper.Views
 
         private void ComboCategories_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (!DefaultCategory.Equals(ComboCategories.SelectedItem.ToString()))
+                IsDirty = true;
         }
 
         private void AppBarBtnSaveEdit_OnClick(object sender, RoutedEventArgs e)
         {
+            if (IsInputValid())
+            {
+                
+            }
+            //DataHandler.Instance.UpdateItem();
         }
 
-        private void ComboCategories_LostFocus(object sender, RoutedEventArgs e)
+        private bool IsInputValid()
         {
-            if(!DefaultCategory.Equals(ComboCategories.SelectedItem.ToString()))
-            IsDirty = true;
+            bool isNameUnique = IsNameUnique();
+            return isNameUnique;
+        }
+
+        private bool IsNameUnique()
+        {
+            return false;
         }
 
         private void TxtName_TextChanged(object sender, TextChangedEventArgs e)

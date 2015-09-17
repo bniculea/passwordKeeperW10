@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -13,7 +14,6 @@ namespace PasswordKeeper.Views
 {
     public sealed partial class AddNewView : Page
     {
-        private static string EntryAlreadyExistWarning = "There is already an account with this name. Please choose a different one :)";
         private NavigationHelper NavigationHelper { get; set; }
         private ObservableDictionary DefaultViewModel { get; set; }
         private ObservableRangeCollection<String> Categories { get; set; } 
@@ -55,18 +55,19 @@ namespace PasswordKeeper.Views
             }
             else
             {
-                Expression<Func<Entry, bool>> expression = (k => k.Name.Equals(name));
-                Entry allreadyExistEntry = DataHandler.Instance.GetEntry(expression);
-                if (allreadyExistEntry != null)
+                bool isEntryAdded = await DataHandler.Instance.AddToDatabase(name, password, category);
+
+                if (isEntryAdded)
                 {
-                    await new MessageDialog(EntryAlreadyExistWarning).ShowAsync();
-                }
-                else
-                {
-                    StoreNewEntry(category, name, password);
+                    if (!Categories.Contains(category))
+                    {
+                        Categories.Add(category);
+                    }
+                    ResetControls();
                 }
             }
         }
+
 
         private bool IsValidInput(string name, string password, string category)
         {
@@ -74,13 +75,7 @@ namespace PasswordKeeper.Views
                    string.IsNullOrEmpty(category);
         }
 
-        private void StoreNewEntry(string category, string name, string password)
-        {
-            Entry entry = new Entry {Category = category, Name = name, Password = password};
-            DataHandler.Instance.AddEntry(entry);
-            if (!Categories.Contains(entry.Category)) Categories.Add(entry.Category);
-            ResetControls();
-        }
+       
 
         private void ResetControls()
         {
