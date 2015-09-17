@@ -110,24 +110,64 @@ namespace PasswordKeeper.Views
                 IsDirty = true;
         }
 
-        private void AppBarBtnSaveEdit_OnClick(object sender, RoutedEventArgs e)
+        private async void AppBarBtnSaveEdit_OnClick(object sender, RoutedEventArgs e)
         {
+            if (!IsNameUnique())
+            {
+                await DataHandler.Instance.PromptEntryAlreadyExistWarning();
+                return;
+            }
             if (IsInputValid())
             {
-                
+                DataHandler.Instance.UpdateItem(DefaultName, TxtName.Text, GetCategory(), TxtPassword.Password);
+                if(NavigationHelper.CanGoBack()) NavigationHelper.GoBack();
             }
-            //DataHandler.Instance.UpdateItem();
+            else
+            {
+                MessageDialog messageDialog = new MessageDialog("Name, Password and Category are mandatory",
+                    "Incomplete input");
+                await messageDialog.ShowAsync();
+            }
+
         }
 
         private bool IsInputValid()
         {
-            bool isNameUnique = IsNameUnique();
-            return isNameUnique;
+            bool isNameValid = !string.IsNullOrEmpty(TxtName.Text.Trim());
+            bool isCategoryValid = !string.IsNullOrEmpty(GetCategory());
+            bool isPasswordValid = !string.IsNullOrEmpty(TxtPassword.Password);
+            return isNameValid && isCategoryValid && isPasswordValid;
+        }
+
+        //TODO(High) - duplicated from AddNewView
+        private string GetCategory()
+        {
+            string categoryToSave = string.Empty;
+            if (TextBoxCategoryName.Visibility == Visibility.Collapsed)
+            {
+                var selectedItem = ComboCategories.SelectedItem;
+                if (selectedItem != null)
+                    categoryToSave = selectedItem.ToString().Trim();
+            }
+            else
+            {
+                categoryToSave = TextBoxCategoryName.Text.Trim();
+            }
+            return categoryToSave;
         }
 
         private bool IsNameUnique()
         {
-            return false;
+            bool isUnique = true;
+            if (TxtName.Text.Equals(DefaultName))
+            {
+                isUnique = true;
+            }
+            else if (DataHandler.Instance.IsEntryInDatabase(TxtName.Text.Trim()))
+            {
+                isUnique = false;
+            }
+            return isUnique;
         }
 
         private void TxtName_TextChanged(object sender, TextChangedEventArgs e)

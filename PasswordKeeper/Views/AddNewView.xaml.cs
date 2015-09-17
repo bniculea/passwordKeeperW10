@@ -44,8 +44,8 @@ namespace PasswordKeeper.Views
 
         private async void AppBarBtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            string name = TxtName.Text;
-            string password = TxtPassword.Password;
+            string name = TxtName.Text.Trim();
+            string password = TxtPassword.Password.Trim();
             string category = GetCategory();
             if (IsValidInput(name, password, category))
             {
@@ -57,14 +57,12 @@ namespace PasswordKeeper.Views
             {
                 bool isEntryAdded = await DataHandler.Instance.AddToDatabase(name, password, category);
 
-                if (isEntryAdded)
+                if (!isEntryAdded) return;
+                if (!Categories.Contains(category))
                 {
-                    if (!Categories.Contains(category))
-                    {
-                        Categories.Add(category);
-                    }
-                    ResetControls();
+                    Categories.Add(category);
                 }
+                ResetControls();
             }
         }
 
@@ -92,11 +90,11 @@ namespace PasswordKeeper.Views
             {
                 var selectedItem = ComboCategories.SelectedItem;
                 if (selectedItem != null)
-                    categoryToSave = selectedItem.ToString();
+                    categoryToSave = selectedItem.ToString().Trim();
             }
             else
             {
-                categoryToSave = TextBoxCategoryName.Text;
+                categoryToSave = TextBoxCategoryName.Text.Trim();
             }
             return categoryToSave;
         }

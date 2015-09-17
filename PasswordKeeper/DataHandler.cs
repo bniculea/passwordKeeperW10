@@ -85,7 +85,7 @@ namespace PasswordKeeper
         public void UpdateItem(string oldName, string newName, string newCategory, string newPassword)
         {
             string command =
-                $"Update {TableName} SET Name='{newName}', Password='{newPassword}', Category='{newCategory}' WHERE Name='{oldName}'";
+                $"Update Entry SET Name='{newName}', Password='{newPassword}', Category='{newCategory}' WHERE Name='{oldName}'";
             ExecuteScalar(command);
         }
         private void ExecuteScalar(string query)
@@ -98,7 +98,7 @@ namespace PasswordKeeper
             bool isAddPerformed = false;
             if (IsEntryInDatabase(name))
             {
-                await new MessageDialog(EntryAlreadyExistWarning).ShowAsync();
+                await PromptEntryAlreadyExistWarning();
             }
             else
             {
@@ -107,6 +107,12 @@ namespace PasswordKeeper
             }
             return isAddPerformed;
         }
+
+        public async Task PromptEntryAlreadyExistWarning()
+        {
+            await new MessageDialog(EntryAlreadyExistWarning).ShowAsync();
+        }
+
         private void StoreNewEntry(string category, string name, string password)
         {
             Entry entry = new Entry { Category = category, Name = name, Password = password };
