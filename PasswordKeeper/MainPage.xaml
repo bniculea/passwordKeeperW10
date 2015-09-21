@@ -28,7 +28,7 @@
            <Button Content="Categories"
                    HorizontalAlignment="Center"
                    Width="172"
-                   Height="66"/>
+                   Height="66" Click="Button_Click"/>
             <Button Content="Delete Database"
                    HorizontalAlignment="Center"
                    Width="172"

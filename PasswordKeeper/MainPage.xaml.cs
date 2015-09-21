@@ -1,7 +1,5 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using DatabaseTools;
-using Model;
 using PasswordKeeper.Views;
 
 namespace PasswordKeeper
@@ -36,6 +34,11 @@ namespace PasswordKeeper
         private void BtnExit_OnClick(object sender, RoutedEventArgs e)
         {
             Application.Current.Exit();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof (CategoriesView));
         }
     }
 }

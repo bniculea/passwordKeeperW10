@@ -16,6 +16,9 @@
                 <GradientStop Color="#FFE8B8B8" Offset="1"/>
             </LinearGradientBrush>
             <Color x:Key="DisplayDataBackgroundColor">#FF816363</Color>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries> 
             </ResourceDictionary>
         </Application.Resources>
 </Application>
