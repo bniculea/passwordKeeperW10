@@ -117,7 +117,7 @@ namespace PasswordKeeper.Views
            
         }
 
-        private static void SetClipboardContent(Entry selectedEntry)
+        private void SetClipboardContent(Entry selectedEntry)
         {
             DataPackage dataPackage = new DataPackage();
             try

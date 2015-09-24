@@ -192,14 +192,12 @@ namespace PasswordKeeper.Views
 
         private void TxtName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!DefaultName.Equals(TxtName.Text))
-                IsDirty = true;
+            IsDirty = !DefaultName.Equals(TxtName.Text);
         }
 
         private void TxtPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (!TxtPassword.Password.Equals(DefaultPassword))
-                IsDirty = true;
+            IsDirty = !TxtPassword.Password.Equals(DefaultPassword);
         }
         private void ShowPasswordCheckbox_OnChecked(object sender, RoutedEventArgs e)
         {

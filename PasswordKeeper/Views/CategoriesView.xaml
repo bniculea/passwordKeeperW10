@@ -60,8 +60,24 @@
                 <ScrollViewer>
                         <ListBox x:Name="AccountsPerCategoryList" SelectionMode="Single">
                         <ListBox.ItemTemplate>
+                            
                                 <DataTemplate>
-                                    <StackPanel>
+                                    <StackPanel x:Name="AssociatedItemStackPanel" Tapped="AssociatedItemStackPanel_OnTapped">
+                                    <FlyoutBase.AttachedFlyout>
+                                            <MenuFlyout>
+                                                <MenuFlyoutItem x:Name="CopyToClipboardFlyoutItem"
+                                                                Text="Copy to clipboard"
+                                                                Click="CopyToClipboardFlyoutItem_OnClick"
+                                                                />
+                                                <MenuFlyoutItem x:Name="EditFlyoutItem"
+                                                                Text="Edit"
+                                                                Click="EditFlyoutItem_OnClick"
+                                                                />
+                                                <MenuFlyoutItem x:Name="DeleteFlyoutItem"
+                                                                Text ="Delete"
+                                                                Click="DeleteFlyoutItem_OnClick"/>
+                                            </MenuFlyout>
+                                        </FlyoutBase.AttachedFlyout>
                                     <Border BorderThickness="2" Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
                                             <TextBlock Text="{Binding Name}"
                                                        VerticalAlignment="Center"
