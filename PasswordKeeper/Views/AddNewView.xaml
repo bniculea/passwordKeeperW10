@@ -9,7 +9,7 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <converters:ComboBoxSelectionConverter x:Key="SelectionConverter"/>
-    </UserControl.Resources>    
+    </UserControl.Resources>
     <Page.BottomAppBar>
         <CommandBar>
             <AppBarButton x:Name="AppBarBtnAdd"
@@ -17,7 +17,7 @@
                           Click="AppBarBtnAdd_Click">
                 <AppBarButton.Icon>
                     <BitmapIcon UriSource="ms-appx:///Toolkit.Content/ApplicationBar.Add.png"/>
-                </AppBarButton.Icon>    
+                </AppBarButton.Icon>
             </AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>

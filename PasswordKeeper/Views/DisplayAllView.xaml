@@ -81,7 +81,9 @@
                                         Click="CopyToClipboardFlyoutItem_OnClick"/>
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
-                <Border BorderThickness="2" Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+                <Border BorderThickness="1" 
+                        Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
+                        BorderBrush="LightGray">
                     <TextBlock Height="45"
                                VerticalAlignment="Center"
                                Text="{Binding Name}"

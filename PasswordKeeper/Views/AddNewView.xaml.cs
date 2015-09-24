@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Windows.UI.Core;
@@ -60,10 +61,16 @@ namespace PasswordKeeper.Views
                 if (!isEntryAdded) return;
                 if (!Categories.Contains(category))
                 {
-                    Categories.Add(category);
+                    AddCategoryInOrder(category);
                 }
                 ResetControls();
             }
+        }
+
+        private void AddCategoryInOrder(string category)
+        {
+            Categories.Add(category);
+            Categories.OrderBy(c => c);
         }
 
 

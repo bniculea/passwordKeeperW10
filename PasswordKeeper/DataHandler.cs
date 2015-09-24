@@ -60,7 +60,7 @@ namespace PasswordKeeper
         public ObservableRangeCollection<string> GetUniqueCategories()
         {
             ObservableRangeCollection<string> uniqueCategoriesCollection = new ObservableRangeCollection<string>();
-            IEnumerable<string> uniqueCategories = GetUniqueCategoriesList();
+            IEnumerable<string> uniqueCategories = GetUniqueCategoriesList().OrderBy(c=>c);
             foreach (string category in uniqueCategories)
             {
                 uniqueCategoriesCollection.Add(category);
