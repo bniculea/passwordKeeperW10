@@ -13,12 +13,17 @@ namespace PasswordKeeper.Views
 {
     public sealed partial class EditView : Page
     {
+        private const string EntrySuccesfullySaved = "Entry was successfully edited and saved.";
+        private const string EntryNotSaved = "There are no pending changes.";
+        private const string EntrySuccesfullySavedTitle = "Saved Changes";
+        private const string EntryNotSavedTitle = "Nothing to save";
         private NavigationHelper NavigationHelper { get; set; }
         private ObservableRangeCollection<string> AvailableCategories { get; set; } 
         private bool IsDirty { get; set; }
         private string DefaultName { get; set; }
         private string DefaultPassword { get; set; }
         private string DefaultCategory { get; set; }
+        
         private App App { get; set; }
         public EditView()
         {
@@ -121,9 +126,16 @@ namespace PasswordKeeper.Views
             }
             if (IsInputValid())
             {
-                DataHandler.Instance.UpdateItem(DefaultName, TxtName.Text, GetCategory(), TxtPassword.Password);
-                await PrompEditWasSuccesfully();
-                ResetDefaults(TxtName.Text, GetCategory(), TxtPassword.Password);
+                if (IsDirty)
+                {
+                    DataHandler.Instance.UpdateItem(DefaultName, TxtName.Text, GetCategory(), TxtPassword.Password);
+                    await PrompEditStatus(EntrySuccesfullySaved, EntrySuccesfullySavedTitle);
+                    ResetDefaults(TxtName.Text, GetCategory(), TxtPassword.Password);
+                }
+                else
+                {
+                    await PrompEditStatus(EntryNotSaved, EntryNotSavedTitle);
+                }
             }
             else
             {
@@ -134,10 +146,10 @@ namespace PasswordKeeper.Views
 
         }
 
-        private static async Task PrompEditWasSuccesfully()
+        private static async Task PrompEditStatus(string statusMessage, string mdTitle)
         {
-            MessageDialog messageDialog = new MessageDialog("Entry was successfully edited and saved.",
-                "Saved Changes");
+            MessageDialog messageDialog = new MessageDialog(statusMessage,
+               mdTitle);
             messageDialog.Commands.Add(new UICommand("OK"));
             messageDialog.DefaultCommandIndex = 0;
             await messageDialog.ShowAsync();

@@ -8,6 +8,7 @@
             <ResourceDictionary>
                 <x:String x:Key="AppName">PASSWORD MANAGER</x:String>
                 <x:String x:Key="AddLabel">Add it</x:String>
+                <x:String x:Key="SaveLabel">Save it</x:String>
                 <LinearGradientBrush x:Key="BrownGradientBrush"
                                      EndPoint="0.5,1"
                                      StartPoint="0.5,0">
