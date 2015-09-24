@@ -22,6 +22,9 @@
                    Grid.ColumnSpan="2"
                    DisplayMode="CompactInline"
                    Grid.Row="1">
+            <SplitView.PaneBackground>
+                <ImageBrush ImageSource="../Assets/PsKeeperBackground.png"/>
+            </SplitView.PaneBackground>
             <SplitView.Pane>
                 <RelativePanel Margin="10,0,0,0">
                     <TextBlock x:Name="CategoriesLabel" Text="Accounts Categories"
@@ -56,7 +59,11 @@
             <RelativePanel RelativePanel.AlignTopWithPanel="True"
                        RelativePanel.Above="StatusPanel"
                        RelativePanel.AlignRightWithPanel="True"
-                       RelativePanel.AlignLeftWithPanel="True">
+                       RelativePanel.AlignLeftWithPanel="True"
+                           >
+                <RelativePanel.Background>
+                    <ImageBrush ImageSource="../Assets/PsKeeperBackground.png"/>
+                </RelativePanel.Background>
                 <ScrollViewer>
                         <ListBox x:Name="AccountsPerCategoryList" SelectionMode="Single">
                         <ListBox.ItemTemplate>
@@ -78,7 +85,7 @@
                                                                 Click="DeleteFlyoutItem_OnClick"/>
                                             </MenuFlyout>
                                         </FlyoutBase.AttachedFlyout>
-                                    <Border BorderThickness="2" Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+                                    <Border BorderThickness="2" Background="{StaticResource SystemControlBackgroundAccentBrush}">
                                             <TextBlock Text="{Binding Name}"
                                                        VerticalAlignment="Center"
                                                        FontFamily="Segoe UI"

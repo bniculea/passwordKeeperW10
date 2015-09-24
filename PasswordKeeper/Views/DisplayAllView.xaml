@@ -37,10 +37,11 @@
         </DataTemplate>
         <DataTemplate x:Key="JumpListGroupTemplate">
             <Border Margin="6"
-                    Width="75" Height="75"
-                    Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+                    Width="50" Height="50"
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    Background="{StaticResource SystemControlForegroundAccentBrush}">
                 <TextBlock Text="{Binding HeaderName}"
-                           Foreground="{StaticResource SystemControlForegroundAccentBrush}"
                            FontSize="32"
                            FontWeight="Bold"
                            HorizontalAlignment="Center"
@@ -49,12 +50,14 @@
         </DataTemplate>
         <DataTemplate x:Key="JumpListEmptyTemplate">
             <Border Margin="6"
-                    Width="75" Height="75"
-                    BorderBrush="Black"
+                    Width="50" Height="50"
+                    BorderBrush="LightGray"
                     BorderThickness="1"
-                    Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+                    >
+                <Border.Background>
+                    <SolidColorBrush Color="LightGray"></SolidColorBrush>
+                </Border.Background>
                 <TextBlock Text="{Binding HeaderName}"
-                           Foreground="{StaticResource SystemControlForegroundAccentBrush}"
                            FontSize="32"
                            FontWeight="Bold"
                            HorizontalAlignment="Center"
@@ -89,7 +92,10 @@
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
-    <Grid x:Name="LayoutRoot" Background="{Binding Source={StaticResource BrownGradientBrush}}">
+    <Grid x:Name="LayoutRoot" >
+        <Grid.Background>
+            <ImageBrush ImageSource="../Assets/PsKeeperBackground.png"/>
+        </Grid.Background>
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
@@ -116,9 +122,10 @@
                               ItemsSource="{Binding Source={StaticResource Cvs}}"
                               IsSwipeEnabled="True"
                               ScrollViewer.IsVerticalScrollChainingEnabled="False"
-                              ItemTemplate="{StaticResource GroupItemTemplate}"
-                              
-                              Background="{Binding Source={StaticResource DisplayDataBackgroundColor}}">
+                              ItemTemplate="{StaticResource GroupItemTemplate}">
+                        <ListView.Background>
+                        <ImageBrush ImageSource="../Assets/PsKeeperBackground.png"/>
+                        </ListView.Background>
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel Orientation="Vertical"/>
@@ -141,7 +148,7 @@
                     <GridView x:Name="ZoomedOutGridView"
                               ScrollViewer.IsHorizontalScrollChainingEnabled="False"
                               HorizontalAlignment="Center"
-                              Opacity ="0.95"
+                              Opacity ="0.85"
                               >
                         <GridView.ItemTemplateSelector>
                             <dataModel:EmptyOrFullSelector
