@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Popups;
@@ -9,7 +8,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 using Common;
-using Model;
 
 namespace PasswordKeeper.Views
 {
@@ -50,21 +48,33 @@ namespace PasswordKeeper.Views
             string category = GetCategory();
             if (IsValidInput(name, password, category))
             {
-                MessageDialog messageDialog = new MessageDialog("Name, Password and Category are mandatory",
-                    "Incomplete input");
-                await messageDialog.ShowAsync();
+                await MessageDialogHelper.PromptStatus(MessageDialogHelper.MandatoryFieldsMessage, MessageDialogHelper.IncompleteInputTitle);
             }
             else
             {
-                bool isEntryAdded = await DataHandler.Instance.AddToDatabase(name, password, category);
-
-                if (!isEntryAdded) return;
-                if (!Categories.Contains(category))
-                {
-                    AddCategoryInOrder(category);
-                }
-                ResetControls();
+                await SaveEntry(name, password, category);
             }
+        }
+
+        private async Task SaveEntry(string name, string password, string category)
+        {
+            if (!IsDirty)
+            {
+                await
+                    MessageDialogHelper.PromptStatus(MessageDialogHelper.EntryNotSaved,
+                        MessageDialogHelper.EntryNotSavedTitle);
+                return;
+            }
+
+            bool isEntrySuccessfullyAdded = await DataHandler.Instance.AddToDatabase(name, password, category);
+            if (!isEntrySuccessfullyAdded) return;
+            if (!Categories.Contains(category))
+            {
+                AddCategoryInOrder(category);
+            }
+            await MessageDialogHelper.PromptStatus(MessageDialogHelper.EntrySuccesfullySaved, MessageDialogHelper.EntrySuccesfullySavedTitle);
+            ResetControls();
+
         }
 
         private void AddCategoryInOrder(string category)
@@ -72,15 +82,11 @@ namespace PasswordKeeper.Views
             Categories.Add(category);
             Categories.OrderBy(c => c);
         }
-
-
         private bool IsValidInput(string name, string password, string category)
         {
             return string.IsNullOrEmpty(name.Trim()) || string.IsNullOrEmpty(password.Trim()) ||
                    string.IsNullOrEmpty(category);
         }
-
-       
 
         private void ResetControls()
         {
@@ -144,7 +150,7 @@ namespace PasswordKeeper.Views
             e.Handled = true;
             if (IsDirty)
             {
-                MessageDialog messageDialog = CreateMessageDialog();
+                MessageDialog messageDialog = MessageDialogHelper.CreateDialogForConfirmOnExit();
                 var result = await messageDialog.ShowAsync();
                 if (result.Label.Equals("Yes") && NavigationHelper.CanGoBack())
                 {
@@ -160,15 +166,6 @@ namespace PasswordKeeper.Views
                     e.Handled = true;
                 }
             }
-        }
-        private MessageDialog CreateMessageDialog()
-        {
-            MessageDialog messageDialog = new MessageDialog("Unsaved changes. Do you wish to exit?", "Pending changes");
-            messageDialog.Commands.Add(new UICommand("Yes"));
-            messageDialog.Commands.Add(new UICommand("No"));
-            messageDialog.DefaultCommandIndex = 0;
-            messageDialog.CancelCommandIndex = 1;
-            return messageDialog;
         }
         private void ShowPasswordCheckbox_OnChecked(object sender, RoutedEventArgs e)
         {

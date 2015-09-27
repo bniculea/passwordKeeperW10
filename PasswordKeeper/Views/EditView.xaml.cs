@@ -13,10 +13,7 @@ namespace PasswordKeeper.Views
 {
     public sealed partial class EditView : Page
     {
-        private const string EntrySuccesfullySaved = "Entry was successfully edited and saved.";
-        private const string EntryNotSaved = "There are no pending changes.";
-        private const string EntrySuccesfullySavedTitle = "Saved Changes";
-        private const string EntryNotSavedTitle = "Nothing to save";
+        
         private NavigationHelper NavigationHelper { get; set; }
         private ObservableRangeCollection<string> AvailableCategories { get; set; } 
         private bool IsDirty { get; set; }
@@ -129,30 +126,19 @@ namespace PasswordKeeper.Views
                 if (IsDirty)
                 {
                     DataHandler.Instance.UpdateItem(DefaultName, TxtName.Text, GetCategory(), TxtPassword.Password);
-                    await PrompEditStatus(EntrySuccesfullySaved, EntrySuccesfullySavedTitle);
+                    await MessageDialogHelper.PromptStatus(MessageDialogHelper.EntrySuccesfullySaved, MessageDialogHelper.EntrySuccesfullySavedTitle);
                     ResetDefaults(TxtName.Text, GetCategory(), TxtPassword.Password);
                 }
                 else
                 {
-                    await PrompEditStatus(EntryNotSaved, EntryNotSavedTitle);
+                    await MessageDialogHelper.PromptStatus(MessageDialogHelper.EntryNotSaved, MessageDialogHelper.EntryNotSavedTitle);
                 }
             }
             else
             {
-                MessageDialog messageDialog = new MessageDialog("Name, Password and Category are mandatory",
-                    "Incomplete input");
-                await messageDialog.ShowAsync();
+                await MessageDialogHelper.PromptStatus(MessageDialogHelper.MandatoryFieldsMessage, MessageDialogHelper.IncompleteInputTitle);
             }
 
-        }
-
-        private static async Task PrompEditStatus(string statusMessage, string mdTitle)
-        {
-            MessageDialog messageDialog = new MessageDialog(statusMessage,
-               mdTitle);
-            messageDialog.Commands.Add(new UICommand("OK"));
-            messageDialog.DefaultCommandIndex = 0;
-            await messageDialog.ShowAsync();
         }
 
         private void ResetDefaults(string newName, string newCategory, string newPassword)
