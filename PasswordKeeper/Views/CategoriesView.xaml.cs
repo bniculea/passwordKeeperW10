@@ -58,7 +58,6 @@ namespace PasswordKeeper.Views
                 }
                 this.AccountsPerCategoryList.ItemsSource = EntriesOfSelectedCategory;
             }
-
         }
 
         private void CopyToClipboardFlyoutItem_OnClick(object sender, RoutedEventArgs e)
@@ -107,6 +106,11 @@ namespace PasswordKeeper.Views
             {
                 // ignored
             }
+        }
+
+        private void DeleteAllFromCategory_OnClick(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

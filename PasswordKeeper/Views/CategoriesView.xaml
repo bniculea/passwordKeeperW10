@@ -21,17 +21,18 @@
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
                    DisplayMode="CompactInline"
-                   Grid.Row="1">
+                   Grid.Row="1"
+                   >
             <SplitView.PaneBackground>
                 <ImageBrush ImageSource="../Assets/PsKeeperBackground.png"/>
             </SplitView.PaneBackground>
             <SplitView.Pane>
-                <RelativePanel Margin="10,0,0,0">
+                <RelativePanel Margin="10,0,2,0">
                     <TextBlock x:Name="CategoriesLabel" Text="Accounts Categories"
                                TextWrapping="Wrap"
                                Margin="0,10,0,0"/>
                     <ScrollViewer RelativePanel.Below="CategoriesLabel"
-                             Margin="0,10,0,0"
+                             Margin="5,10,0,0"
                              RelativePanel.Above="FooterPanel">
                         <ListBox x:Name="CategoriesList"
                              SelectionChanged="CategoriesList_OnSelectionChanged"
@@ -40,12 +41,40 @@
                              Background="Transparent"
                              BorderThickness="0"
                              VerticalAlignment="Top"
+                              Margin="0,0,10,0"
                              >
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding}"/>
+                                    <StackPanel x:Name="CategoriesStackPanel">
+                                        <FlyoutBase.AttachedFlyout>
+                                           <MenuFlyout>
+                                               <MenuFlyoutItem x:Name="DeleteAllFromCategory"
+                                                               Text="Delete entire category"
+                                                               Click="DeleteAllFromCategory_OnClick"/>
+                                           </MenuFlyout> 
+                                        </FlyoutBase.AttachedFlyout>
+                                        <Border BorderThickness="1"
+                                                BorderBrush="LightGray">
+                                            <TextBlock Text="{Binding}"
+                                                       VerticalAlignment="Center"
+                                                       HorizontalAlignment="Center"
+                                                       FontFamily="Segoe UI"
+                                                       FontSize="24"
+                                                       Height="45"
+                                                       />
+                                        </Border>
+                                     
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    <Setter Property="Margin" Value="0,0,2,5" />
+                                    <Setter Property="Padding" Value="0" />
+                                </Style>
+                            </ListBox.ItemContainerStyle>
                         </ListBox>
                     </ScrollViewer>
                     
