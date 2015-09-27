@@ -107,22 +107,24 @@ namespace PasswordKeeper
             }
             return isAddPerformed;
         }
-
         public async Task PromptEntryAlreadyExistWarning()
         {
             await new MessageDialog(EntryAlreadyExistWarning).ShowAsync();
         }
-
         private void StoreNewEntry(string category, string name, string password)
         {
             Entry entry = new Entry { Category = category, Name = name, Password = password };
             AddEntry(entry);
         }
-
         public bool IsEntryInDatabase(string name)
         {
             Expression<Func<Entry, bool>> expression = (k => k.Name.Equals(name));
             return GetEntry(expression) != null;
+        }
+        public void RemoveAllByCategory(string categoryName)
+        {
+            string command = $"DELETE FROM Entry WHERE Category='{categoryName}'";
+            ExecuteScalar(command);
         }
     }
 }

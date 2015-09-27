@@ -45,7 +45,9 @@
                              >
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel x:Name="CategoriesStackPanel">
+                                    <StackPanel x:Name="CategoriesStackPanel"
+                                                RightTapped="CategoriesStackPanel_OnRightTapped"
+                                                >
                                         <FlyoutBase.AttachedFlyout>
                                            <MenuFlyout>
                                                <MenuFlyoutItem x:Name="DeleteAllFromCategory"

@@ -19,6 +19,7 @@ namespace PasswordKeeper.Views
     {
         private ObservableCollection<Entry> EntriesObservableCollection { get; set; } 
         private ObservableCollection<Entry> EntriesOfSelectedCategory { get; set; }
+        private ObservableRangeCollection<string> CategoriesListObservableCollection { get; set; }
         public CategoriesView()
         {
             this.InitializeComponent();
@@ -34,8 +35,9 @@ namespace PasswordKeeper.Views
                 EntriesObservableCollection.Add(entry);
             }
             List<string> distinctCategories = EntriesObservableCollection.Select(k => k.Category).Distinct().ToList();
-            CategoriesList.ItemsSource = distinctCategories;
-
+            CategoriesListObservableCollection = new ObservableRangeCollection<string>();
+            CategoriesListObservableCollection.AddRange(distinctCategories);
+            CategoriesList.ItemsSource = CategoriesListObservableCollection;
         }
 
         private void ToogleButton_OnClick(object sender, RoutedEventArgs e)
@@ -51,12 +53,18 @@ namespace PasswordKeeper.Views
             string selectedCategory = listBox?.SelectedItem as string;
             if (selectedCategory != null)
             {
-                var entriesAccordingToSelectedCategory= EntriesObservableCollection.Where(entry => entry.Category.Equals(selectedCategory));
-                foreach (Entry entry in entriesAccordingToSelectedCategory)
-                {
-                    EntriesOfSelectedCategory.Add(entry);
-                }
+                UpdateEntriesAccordingToSelectedCategory(selectedCategory);
                 this.AccountsPerCategoryList.ItemsSource = EntriesOfSelectedCategory;
+            }
+        }
+
+        private void UpdateEntriesAccordingToSelectedCategory(string selectedCategory)
+        {
+            var entriesAccordingToSelectedCategory =
+                EntriesObservableCollection.Where(entry => entry.Category.Equals(selectedCategory));
+            foreach (Entry entry in entriesAccordingToSelectedCategory)
+            {
+                EntriesOfSelectedCategory.Add(entry);
             }
         }
 
@@ -73,16 +81,12 @@ namespace PasswordKeeper.Views
             if (selectedEntry == null) return;
             Frame.Navigate(typeof (EditView), selectedEntry);
         }
-
-
-
         private void DeleteFlyoutItem_OnClick(object sender, RoutedEventArgs e)
         {
             Entry selectedEntry = GetEntryFromSelectedItem(e);
             DataHandler.Instance.RemoveEntry(selectedEntry);
             EntriesOfSelectedCategory.Remove(selectedEntry);
         }
-
         private Entry GetEntryFromSelectedItem(RoutedEventArgs e)
         {
             FrameworkElement frameworkElement = e.OriginalSource as FrameworkElement;
@@ -107,10 +111,20 @@ namespace PasswordKeeper.Views
                 // ignored
             }
         }
-
         private void DeleteAllFromCategory_OnClick(object sender, RoutedEventArgs e)
         {
+            FrameworkElement frameworkElement = e.OriginalSource as FrameworkElement;
+            string categoryName =  frameworkElement?.DataContext as string;
+            DataHandler.Instance.RemoveAllByCategory(categoryName);
+            EntriesOfSelectedCategory.Clear();
+            CategoriesListObservableCollection.Remove(categoryName);
+        }
 
+        private void CategoriesStackPanel_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
         }
     }
 }
