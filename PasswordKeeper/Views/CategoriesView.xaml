@@ -20,7 +20,7 @@
                    IsPaneOpen="True"
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
-                   DisplayMode="CompactInline"
+                   DisplayMode="Overlay"
                    Grid.Row="1"
                    >
             <SplitView.PaneBackground>

@@ -77,7 +77,7 @@ namespace PasswordKeeper
             return uniqueCategories;
         }
 
-        public void AddEntry(Entry entry)
+        private void AddEntry(Entry entry)
         {
             DataManager.AddItemToTable(entry);
         }
@@ -124,6 +124,12 @@ namespace PasswordKeeper
         public void RemoveAllByCategory(string categoryName)
         {
             string command = $"DELETE FROM Entry WHERE Category='{categoryName}'";
+            ExecuteScalar(command);
+        }
+
+        public void RemoveAllEntries()
+        {
+            string command = $"DELETE FROM Entry";
             ExecuteScalar(command);
         }
     }

@@ -29,12 +29,6 @@
                    HorizontalAlignment="Center"
                    Width="172"
                    Height="66" Click="Button_Click"/>
-            <Button Content="Delete Database"
-                   HorizontalAlignment="Center"
-                   Width="172"
-                   Height="66"
-                   Click="ButtonBase_OnClick"
-                   Margin="0,10,0,0"/>
             <Button Content="Exit"
                    HorizontalAlignment="Center"
                    Width="172"
@@ -42,6 +36,21 @@
                    x:Name="BtnExit"
                    Margin="0,10,0,0"
                     Click="BtnExit_OnClick"/>
+            <Button Content="PrepopulateDatabase"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Center"
+                    Width="172"
+                    Height="66"
+                    Name="BtnPopulateDatabase"
+                    Click="BtnPopulateDatabase_OnClick"
+                    />
+           <Button Content="Clear all entries"
+                   Margin="0,10,0,0"
+                   HorizontalAlignment="Center"
+                   Width="172"
+                   Height="66"
+                   Name="BtnRemoveAll"
+                   Click="BtnRemoveAll_OnClick"/>
        </StackPanel>
     </Grid>
 </Page>
