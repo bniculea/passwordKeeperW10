@@ -22,6 +22,9 @@
         </CommandBar>
     </Page.BottomAppBar>
     <Grid Style="{StaticResource BlackBlueBackgroundGrid}">
+        <TextBlock Text="{StaticResource AppName}"
+                       Style="{ThemeResource TitleTextBlockStyle}"
+                       Margin="19,12,0,0"/>
         <ScrollViewer>
             <StackPanel HorizontalAlignment="Center"
                    VerticalAlignment="Center">

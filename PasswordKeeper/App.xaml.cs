@@ -34,12 +34,12 @@ namespace PasswordKeeper
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             ActivationKind activationKind = e.Kind;
-#if DEBUG
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                this.DebugSettings.EnableFrameRateCounter = true;
-            }
-#endif
+//#if DEBUG
+//            if (System.Diagnostics.Debugger.IsAttached)
+//            {
+//                this.DebugSettings.EnableFrameRateCounter = true;
+//            }
+//#endif
 
             Frame rootFrame = Window.Current.Content as Frame;
 
