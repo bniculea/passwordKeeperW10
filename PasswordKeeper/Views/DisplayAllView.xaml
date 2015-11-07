@@ -10,7 +10,8 @@
     <Page.BottomAppBar>
         <CommandBar>
             <AppBarButton x:Name="AppBarBtnAdd"
-                          Label="{StaticResource AddLabel}">
+                          Label="{StaticResource AddNewLabel}"
+                          Click="AppBarBtnAdd_OnClick">
                 <AppBarButton.Icon>
                     <BitmapIcon UriSource="ms-appx:///Toolkit.Content/ApplicationBar.Add.png"/>
                 </AppBarButton.Icon>                
@@ -159,9 +160,9 @@
                         </GridView.ItemTemplateSelector>
                         <GridView.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapGrid Background="LightGray" MaximumRowsOrColumns="9" 
-                                          VerticalChildrenAlignment="Center"
-                                          Orientation="Horizontal"/>
+                                <ItemsWrapGrid  MaximumRowsOrColumns="5"
+                                                Orientation="Horizontal"
+                                                UseLayoutRounding="True"/>
                             </ItemsPanelTemplate>
                         </GridView.ItemsPanel>
                     </GridView>

@@ -222,5 +222,10 @@ namespace PasswordKeeper.Views
             FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
             flyoutBase.ShowAt(senderElement);
         }
+
+        private void AppBarBtnAdd_OnClick(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof (AddNewView));
+        }
     }
 }

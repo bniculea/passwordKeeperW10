@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using Model;
 using SQLite.Net;
 using SQLite.Net.Platform.WinRT;
 
