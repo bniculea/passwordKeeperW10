@@ -71,5 +71,9 @@ namespace PasswordKeeper
         {
             DataHandler.Instance.RemoveAllEntries();
         }
+
+        private void AboutButton_OnClick(object sender, RoutedEventArgs e)
+        {
+        }
     }
 }

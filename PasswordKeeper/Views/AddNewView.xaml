@@ -21,7 +21,7 @@
             </AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>
-    <Grid Background="{Binding Source={StaticResource BrownGradientBrush}}">
+    <Grid Style="{StaticResource BlackBlueBackgroundGrid}">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>

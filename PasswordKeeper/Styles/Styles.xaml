@@ -106,4 +106,46 @@
         <Setter Property="FontWeight" Value="Light"/>
         <Setter Property="FontSize" Value="16"/>
     </Style>
+    <Style x:Key="BlackBlueBackgroundGrid" TargetType="Grid">
+        <Setter Property="Background">
+            <Setter.Value>
+                <ImageBrush ImageSource="../Assets/Backgrounds/blurredbackground19.jpg"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="BlackBlueBackgroundListView" TargetType="ListView">
+        <Setter Property="Background">
+            <Setter.Value>
+                <ImageBrush ImageSource="../Assets/Backgrounds/blurredbackground19.jpg"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="BlackBlueBackgroundListBox" TargetType="ListBox">
+        <Setter Property="Background">
+            <Setter.Value>
+                <ImageBrush ImageSource="../Assets/Backgrounds/blurredbackground19.jpg"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="BlackBlueBackgroundRelativePanel" TargetType="RelativePanel">
+        <Setter Property="Background">
+            <Setter.Value>
+                <ImageBrush ImageSource="../Assets/Backgrounds/blurredbackground19.jpg"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="BlackBlueBackgroundSplitViewPanel" TargetType="SplitView">
+        <Setter Property="Background">
+            <Setter.Value>
+                <ImageBrush ImageSource="../Assets/Backgrounds/blurredbackground19.jpg"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="BlackBlueBackgroundBorder" TargetType="Border">
+        <Setter Property="Background">
+            <Setter.Value>
+                <ImageBrush ImageSource="../Assets/Backgrounds/blurredbackground19.jpg"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

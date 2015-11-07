@@ -83,7 +83,7 @@
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
                 <Border BorderThickness="1" 
-                        Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
+                        Style="{StaticResource BlackBlueBackgroundBorder}"
                         BorderBrush="LightGray">
                     <TextBlock Height="45"
                                VerticalAlignment="Center"
@@ -95,10 +95,7 @@
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
-    <Grid x:Name="LayoutRoot" >
-        <Grid.Background>
-            <ImageBrush ImageSource="../Assets/PsKeeperBackground.png"/>
-        </Grid.Background>
+    <Grid x:Name="LayoutRoot" Style="{StaticResource BlackBlueBackgroundGrid}" >
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
@@ -121,14 +118,12 @@
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch">
                 <SemanticZoom.ZoomedInView>
-                    <ListView x:Name="ListViewZoomedInPasswords"
+                    <ListView x:Name="ListViewZoomedInPasswords" Style="{StaticResource BlackBlueBackgroundListView}"
                               ItemsSource="{Binding Source={StaticResource Cvs}}"
                               IsSwipeEnabled="True"
                               ScrollViewer.IsVerticalScrollChainingEnabled="False"
-                              ItemTemplate="{StaticResource GroupItemTemplate}">
-                        <ListView.Background>
-                        <ImageBrush ImageSource="../Assets/PsKeeperBackground.png"/>
-                        </ListView.Background>
+                              ItemTemplate="{StaticResource GroupItemTemplate}"
+                              >
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel Orientation="Vertical"/>
