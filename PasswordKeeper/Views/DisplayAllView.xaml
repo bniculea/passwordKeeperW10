@@ -163,6 +163,17 @@
                     </GridView>
                 </SemanticZoom.ZoomedOutView>
             </SemanticZoom>
+            <StackPanel x:Name="NoDataStackPanel">
+                <TextBlock Text="There are no entries"
+                           Margin="0,20,0,10"
+                           HorizontalAlignment="Center"
+                           FontSize="26"/>
+                <Image 
+                       Source="../Assets/SadFace512.png" 
+                    Width="256"
+                    Height="256"
+                    />
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

@@ -156,11 +156,12 @@ namespace PasswordKeeper.Views
         /// <param name="e">Provides data for navigation methods and event
         /// handlers that cannot cancel the navigation request.</param>
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             NavigationHelper.OnNavigatedTo(e);
             var entryList = AddDataToRepository();
             EntryRepository.Collection.AddRange(entryList);
+            
             TotalEntries = EntryRepository.Collection.Count;
             _dataLetter = EntryRepository.GetGroupsByLetter;
             Cvs.Source = _dataLetter;
@@ -168,14 +169,19 @@ namespace PasswordKeeper.Views
             ListViewBase = SemanticZoom.ZoomedOutView as ListViewBase;
             if (ListViewBase != null)
                 ListViewBase.ItemsSource = EntryRepository.PasswordHeaders;
-
+            WarnIfNoEntries();
             //ListViewZoomedInPasswords.SelectionChanged -=  ListViewZoomedIn_SelectionChanged;
             ListViewZoomedInPasswords.SelectedItem = null;
-
             //ListViewZoomedInPasswords.SelectionChanged +=  ListViewZoomedIn_SelectionChanged;
-
             this.SemanticZoom.ViewChangeStarted -= SemanticZoom_ViewChangeStarted;
             this.SemanticZoom.ViewChangeStarted += SemanticZoom_ViewChangeStarted;
+        }
+
+        private void WarnIfNoEntries()
+        {
+            NoDataStackPanel.Visibility = EntryRepository.Collection.Count == 0
+                ? Visibility.Visible
+                : Visibility.Collapsed;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

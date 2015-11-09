@@ -138,7 +138,7 @@
             <Border>
                 <ToggleButton Style="{StaticResource SymbolButton}"
                               Click="ToogleButton_OnClick"
-                              VerticalAlignment="Top"
+                              VerticalAlignment="Stretch"
                               Foreground="{ThemeResource ApplicationForegroundThemeBrush}">
                     <ToggleButton.Content>
                         <FontIcon x:Name="Hamburger"
@@ -147,6 +147,37 @@
                 </ToggleButton>
             </Border>
             <TextBlock x:Name="Header" Text="Password Keeper" Style="{StaticResource TagLineTextStyle}" Margin="0,15,0,0"/>
+        </StackPanel>
+        <StackPanel x:Name="NoDataStackPanel" 
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Visibility="Collapsed">
+            <TextBlock Text="There are no entries"
+                       Margin="0,20,0,10"
+                       HorizontalAlignment="Center"
+                       FontSize="26"/>
+            <Image
+                Source="../Assets/SadFace512.png" 
+                Width="256"
+                Height="256"
+                    />
+        </StackPanel>
+        <StackPanel x:Name="NoSelectionStackPanel" Grid.Row="1"
+                    Visibility="Collapsed"
+                    Grid.Column="1">
+            <TextBlock Text="Select a category"
+                       Margin="0,20,0,0"
+                       HorizontalAlignment="Center"
+                       FontSize="26"/>
+            <Button Name="HamburgerButton"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe MDL2 Assets"
+                    Content="&#xE700;"
+                    FontSize="50"
+                    Margin="0,40,0,0"
+                    Click="ToogleButton_OnClick"
+                    />
         </StackPanel>
     </Grid>
 </Page>
