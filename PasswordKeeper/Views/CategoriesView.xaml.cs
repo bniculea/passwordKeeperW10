@@ -27,7 +27,6 @@ namespace PasswordKeeper.Views
             InitializeCategories();
             CategoriesListObservableCollection.CollectionChanged += CategoriesListObservableCollection_CollectionChanged;
             HandleEmptySelection();
-            CategorySplitter.IsPaneOpen = false;
         }
 
         private void CategoriesListObservableCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -43,10 +42,6 @@ namespace PasswordKeeper.Views
             if (EntriesObservableCollection.Count == 0)
             {
                 NoDataStackPanel.Visibility = Visibility.Visible;
-            }
-            else if (CategoriesList.SelectedItems.Count == 0)
-            {
-                NoSelectionStackPanel.Visibility = Visibility.Visible;
             }
         }
 
@@ -72,7 +67,6 @@ namespace PasswordKeeper.Views
 
         private void CategoriesList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            NoSelectionStackPanel.Visibility = Visibility.Collapsed;
             EntriesOfSelectedCategory = new ObservableRangeCollection<Entry>();
             ListBox listBox = sender as ListBox;
             string selectedCategory = listBox?.SelectedItem as string;

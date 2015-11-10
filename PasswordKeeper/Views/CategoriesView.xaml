@@ -22,6 +22,8 @@
                    Grid.ColumnSpan="2"
                    DisplayMode="Overlay"
                    Grid.Row="1"
+                   OpenPaneLength="200"
+                   Opacity="100"
                    >
             <SplitView.Pane>
                 <RelativePanel Margin="10,0,2,0" Style="{StaticResource BlackBlueBackgroundRelativePanel}">
@@ -80,7 +82,8 @@
             </SplitView.Pane>
             <RelativePanel RelativePanel.AlignTopWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"
-                       RelativePanel.AlignLeftWithPanel="True">
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignBottomWithPanel="True">
                 <ScrollViewer>
                         <ListBox x:Name="AccountsPerCategoryList" 
                                  Style="{StaticResource BlackBlueBackgroundListBox}"
@@ -124,6 +127,7 @@
                                 <Setter Property="VerticalContentAlignment" Value="Center"/>
                                 <Setter Property="Margin" Value="0,0,0,5" />
                                 <Setter Property="Padding" Value="0" />
+                                <Setter Property="Background" Value="{StaticResource SystemControlBackgroundAccentBrush}"/>
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
@@ -160,23 +164,6 @@
                 Source="../Assets/SadFace512.png" 
                 Width="256"
                 Height="256"
-                    />
-        </StackPanel>
-        <StackPanel x:Name="NoSelectionStackPanel" Grid.Row="1"
-                    Visibility="Collapsed"
-                    Grid.Column="1">
-            <TextBlock Text="Select a category"
-                       Margin="0,20,0,0"
-                       HorizontalAlignment="Center"
-                       FontSize="26"/>
-            <Button Name="HamburgerButton"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontFamily="Segoe MDL2 Assets"
-                    Content="&#xE700;"
-                    FontSize="50"
-                    Margin="0,40,0,0"
-                    Click="ToogleButton_OnClick"
                     />
         </StackPanel>
     </Grid>

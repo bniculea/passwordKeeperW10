@@ -7,7 +7,7 @@ namespace PasswordKeeper
     public static class MessageDialogHelper
     {
         public static string MandatoryFieldsMessage = "Name, Password and Category are mandatory";
-        public static string EntrySuccesfullySaved = "Entry was successfully edited and saved.";
+        public static string EntrySuccesfullySaved = "Entry was successfully saved.";
         public static string EntryNotSaved = "There are no pending changes.";
         public static string EntrySuccesfullySavedTitle = "Saved Changes";
         public static string EntryNotSavedTitle = "Nothing to save";
