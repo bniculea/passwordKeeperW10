@@ -4,10 +4,12 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Common;
 using Model;
 
@@ -137,6 +139,18 @@ namespace PasswordKeeper.Views
             DataHandler.Instance.RemoveAllByCategory(categoryName);
             EntriesOfSelectedCategory.Clear();
             CategoriesListObservableCollection.Remove(categoryName);
+        }
+
+        private void AccountsPerCategoryList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox listBox = sender as ListBox;
+            listBox?.Focus(FocusState.Pointer);
+        }
+        private void CategoriesStackPanel_OnHolding(object sender, HoldingRoutedEventArgs e)
+        {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
         }
 
         private void CategoriesStackPanel_OnRightTapped(object sender, RightTappedRoutedEventArgs e)

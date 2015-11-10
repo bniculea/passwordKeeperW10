@@ -44,6 +44,7 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel x:Name="CategoriesStackPanel"
+                                                Holding="CategoriesStackPanel_OnHolding"
                                                 RightTapped="CategoriesStackPanel_OnRightTapped"
                                                 >
                                         <FlyoutBase.AttachedFlyout>
@@ -87,7 +88,9 @@
                 <ScrollViewer>
                         <ListBox x:Name="AccountsPerCategoryList" 
                                  Style="{StaticResource BlackBlueBackgroundListBox}"
-                                 SelectionMode="Single">
+                                 SelectionChanged="AccountsPerCategoryList_OnSelectionChanged"
+                                 SelectionMode="Single"
+                                 Background="Transparent">
                         <ListBox.ItemTemplate>
                             
                                 <DataTemplate>
@@ -108,7 +111,6 @@
                                             </MenuFlyout>
                                         </FlyoutBase.AttachedFlyout>
                                     <Border BorderThickness="1"
-                                            Style="{StaticResource BlackBlueBackgroundBorder}"
                                             BorderBrush="LightGray">
                                             <TextBlock Text="{Binding Name}"
                                                        VerticalAlignment="Center"
@@ -127,7 +129,6 @@
                                 <Setter Property="VerticalContentAlignment" Value="Center"/>
                                 <Setter Property="Margin" Value="0,0,0,5" />
                                 <Setter Property="Padding" Value="0" />
-                                <Setter Property="Background" Value="{StaticResource SystemControlBackgroundAccentBrush}"/>
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
